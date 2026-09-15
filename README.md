@@ -8,16 +8,16 @@ dépendances : `pytest` et `mypy`.
 
 Depuis PowerShell, à la racine du projet :
 
-"py -m venv .venv"
-".venv\Scripts\Activate.ps1"
-"py -m pip install -r requirements.txt"
+`py -m venv .venv`,
+`.venv\Scripts\Activate.ps1`,
+`py -m pip install -r requirements.txt`
 
 
 ## Tests et vérification des types
 
 A faire sur powershell:
-"py -m pytest -v"
-"py -m mypy src tests"
+`py -m pytest -v`,
+`py -m mypy src tests`
 
 
 ## Organisation
@@ -33,7 +33,7 @@ A faire sur powershell:
 ## Création des CSV
 
 A faire sur powershell:
-"py -m src.generator"
+`py -m src.generator`
 
 
 Crée deux fichiers fixes de cinq transactions dans `data/input`.
