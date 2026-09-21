@@ -1,4 +1,5 @@
 from copy import deepcopy
+from decimal import Decimal
 
 from src.models import Transaction
 from src.processing import (
@@ -9,50 +10,36 @@ from src.processing import (
 )
 
 
-SAMPLE: list[Transaction] = [
-    {
+def make(origin: str, bank: str, dest: str, montant: str) -> Transaction:
+    return {
         "datetime_transaction": "2026-01-01T10:00:00",
-        "iban_origine": "FR-A",
+        "iban_origine": origin,
         "pays_source": "France",
-        "banque_source": "Banque A",
-        "iban_destinataire": "FR-X",
+        "banque_source": bank,
+        "iban_destinataire": dest,
         "pays_destinataire": "France",
-        "montant": "1000.00",
+        "montant": Decimal(montant),
         "devise": "EUR",
-    },
-    {
-        "datetime_transaction": "2026-01-01T11:00:00",
-        "iban_origine": "FR-A",
-        "pays_source": "France",
-        "banque_source": "Banque A",
-        "iban_destinataire": "FR-Y",
-        "pays_destinataire": "France",
-        "montant": "6000.00",
-        "devise": "EUR",
-    },
-    {
-        "datetime_transaction": "2026-01-01T12:00:00",
-        "iban_origine": "FR-B",
-        "pays_source": "France",
-        "banque_source": "Banque B",
-        "iban_destinataire": "FR-X",
-        "pays_destinataire": "France",
-        "montant": "5000.00",
-        "devise": "EUR",
-    },
+    }
+
+
+SAMPLE = [
+    make("FR-A", "Banque A", "FR-X", "1234.56"),
+    make("FR-A", "Banque A", "FR-Y", "7250.75"),
+    make("FR-B", "Banque B", "FR-X", "5000.00"),
 ]
 
 
 def test_sum_sent_by_origin() -> None:
-    assert sum_sent_by_origin(SAMPLE) == {"FR-A": 7000.0, "FR-B": 5000.0}
+    assert sum_sent_by_origin(SAMPLE) == {"FR-A": Decimal("8485.31"), "FR-B": Decimal("5000")}
 
 
 def test_sum_sent_by_bank() -> None:
-    assert sum_sent_by_bank(SAMPLE) == {"Banque A": 7000.0, "Banque B": 5000.0}
+    assert sum_sent_by_bank(SAMPLE) == {"Banque A": Decimal("8485.31"), "Banque B": Decimal("5000")}
 
 
 def test_sum_received_by_iban() -> None:
-    assert sum_received_by_iban(SAMPLE) == {"FR-X": 6000.0, "FR-Y": 6000.0}
+    assert sum_received_by_iban(SAMPLE) == {"FR-X": Decimal("6234.56"), "FR-Y": Decimal("7250.75")}
 
 
 def test_flag_transactions_and_purity() -> None:
@@ -60,4 +47,3 @@ def test_flag_transactions_and_purity() -> None:
     result = flag_transactions(SAMPLE)
     assert [item["est_suspecte"] for item in result] == [False, True, False]
     assert SAMPLE == before
-

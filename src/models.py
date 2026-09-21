@@ -1,4 +1,17 @@
+from decimal import Decimal
 from typing import TypedDict
+
+
+CSV_COLUMNS = [
+    "datetime_transaction",
+    "iban_origine",
+    "pays_source",
+    "banque_source",
+    "iban_destinataire",
+    "pays_destinataire",
+    "montant",
+    "devise",
+]
 
 
 class Transaction(TypedDict):
@@ -8,7 +21,7 @@ class Transaction(TypedDict):
     banque_source: str
     iban_destinataire: str
     pays_destinataire: str
-    montant: str
+    montant: Decimal
     devise: str
 
 
@@ -20,4 +33,3 @@ class LoadedFile(TypedDict):
     path: str
     content_hash: str
     transactions: list[Transaction]
-
