@@ -1,3 +1,4 @@
+Etudiant : LA Dan-Michel, Mastère data engineering & IA
 # Pipeline de transaction
 
 Ce programme fabrique des fichiers CSV de transactions bancaires, les lit,
